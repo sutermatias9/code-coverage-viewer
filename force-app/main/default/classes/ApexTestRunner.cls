@@ -19,17 +19,17 @@ public with sharing class ApexTestRunner {
         Boolean isTest = false;
 
         while (isComment) {
-            String firstTwoChars = classBody.substring(i, i + 2);
+            String nextTwoChars = classBody.substring(i, i + 2);
 
             // Skip new lines and whitespaces
-            if (!firstTwoChars.contains('\n') && !firstTwoChars.contains(' ')) {
+            if (!nextTwoChars.contains('\n') && !nextTwoChars.contains(' ')) {
                 // Detect single-line comments (//)
-                if (firstTwoChars == '//') {
+                if (nextTwoChars == '//') {
                     // Skip to the end of the line
                     i = classBody.indexOf('\n', i);
                 }
                 // Detect multi-line comments (/*)
-                else if (firstTwoChars == '/*') {
+                else if (nextTwoChars == '/*') {
                     i = classBody.indexOf('*/', i) + 1;
                 }
                 // Detect "@isTest" annotation outside comments
