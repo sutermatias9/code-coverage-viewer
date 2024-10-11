@@ -1,15 +1,16 @@
 public with sharing class ApexTestRunner {
     public static void runAllTests() {
-        String b = [SELECT Id, Body FROM ApexClass WHERE Name = 'ApexTestRunner'].Body;
-        Boolean isTest = isTestClass(b);
-        System.debug(isTest);
-        // List<ApexTestQueueItem> qi = new List<ApexTestQueueItem>();
+        List<ApexTestQueueItem> testItems = new List<ApexTestQueueItem>();
 
-        // for(ApexClass c : [SELECT Id FROM ApexClass]) {
-        //     qi.add(new ApexTestQueueItem(ApexClassId=c.Id));
-        // }
+        for (ApexClass c : [SELECT Id, Body, Name FROM ApexClass]) {
+            if (isTestClass(c.Body)) {
+                testItems.add(new ApexTestQueueItem(ApexClassId = c.Id));
+                System.debug('Test class: ' + c.Name);
+            }
+        }
 
-        // insert qi;
+        // Execute tests
+        insert testItems;
     }
 
     private static boolean isTestClass(String classBody) {
