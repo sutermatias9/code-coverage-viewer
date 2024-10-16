@@ -2,7 +2,7 @@ public with sharing class ApexClassHandler {
     static final String endpoint = '/services/data/v60.0/tooling/query/?q=';
 
     @AuraEnabled
-    public static void getClassCoverages() {
+    public static List<ClassCoverage> getClassCoverages() {
         String myDomain = URL.getOrgDomainUrl().toExternalForm();
         String query = 'SELECT NumLinesCovered, NumLinesUncovered, Coverage, ApexClassorTriggerId FROM ApexCodeCoverageAggregate';
 
@@ -18,6 +18,7 @@ public with sharing class ApexClassHandler {
             Map<String, Object> deserializedRes = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
 
             Map<Id, ApexClass> apexClasses = new Map<Id, ApexClass>([SELECT Id, Name FROM ApexClass]);
+            List<ClassCoverage> codeCoverageData = new List<ClassCoverage>();
 
             for (Object r : (List<Object>) deserializedRes.get('records')) {
                 Map<String, Object> record = (Map<String, Object>) r;
@@ -30,7 +31,11 @@ public with sharing class ApexClassHandler {
                 classInfo.numLinesUncovered = (Integer) record.get('NumLinesUncovered');
                 classInfo.coveredLines = convertToIntegerList((List<Object>) coverage.get('coveredLines'));
                 classInfo.uncoveredLines = convertToIntegerList((List<Object>) coverage.get('uncoveredLines'));
+
+                codeCoverageData.add(classInfo);
             }
+
+            return codeCoverageData;
         } catch (Exception e) {
             throw new AuraHandledException(e.getMessage());
         }
