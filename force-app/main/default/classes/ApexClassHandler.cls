@@ -1,9 +1,7 @@
 public with sharing class ApexClassHandler {
-    static final String endpoint = '/services/data/v60.0/tooling/query/?q=';
-
     @AuraEnabled
     public static List<ClassCoverage> getClassCoverages() {
-        String myDomain = URL.getOrgDomainUrl().toExternalForm();
+        String baseUrl = 'callout:ToolingRest/?q=';
         String query = 'SELECT NumLinesCovered, NumLinesUncovered, Coverage, ApexClassorTriggerId FROM ApexCodeCoverageAggregate';
 
         try {
@@ -12,7 +10,7 @@ public with sharing class ApexClassHandler {
             HttpRequest request = new HttpRequest();
             request.setHeader('Authorization', 'Bearer ' + UserInfo.getSessionId());
             request.setMethod('GET');
-            request.setEndpoint(myDomain + endpoint + EncodingUtil.urlEncode(query, 'UTF-8'));
+            request.setEndpoint(baseUrl + EncodingUtil.urlEncode(query, 'UTF-8'));
 
             HttpResponse response = http.send(request);
             Map<String, Object> deserializedRes = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
@@ -37,7 +35,7 @@ public with sharing class ApexClassHandler {
 
             return codeCoverageData;
         } catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
+            throw new AuraHandledException('Error getting class coverages: ' + e.getMessage());
         }
     }
 
@@ -105,13 +103,5 @@ public with sharing class ApexClassHandler {
         }
 
         return isTest;
-    }
-
-    class ClassCoverage {
-        String className;
-        Integer numLinesCovered;
-        Integer numLinesUncovered;
-        List<Integer> coveredLines;
-        List<Integer> uncoveredLines;
     }
 }
