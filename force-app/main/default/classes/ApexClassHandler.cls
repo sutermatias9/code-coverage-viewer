@@ -1,6 +1,6 @@
 public with sharing class ApexClassHandler {
     @AuraEnabled
-    public static List<ClassCoverage> getClassCoverages() {
+    public static List<ClassCoverageWrapper> getClassCoverages() {
         String baseUrl = 'callout:ToolingRest/?q=';
         String query = 'SELECT NumLinesCovered, NumLinesUncovered, Coverage, ApexClassorTriggerId FROM ApexCodeCoverageAggregate';
 
@@ -16,14 +16,14 @@ public with sharing class ApexClassHandler {
             Map<String, Object> deserializedRes = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
 
             Map<Id, ApexClass> apexClasses = new Map<Id, ApexClass>([SELECT Id, Name FROM ApexClass]);
-            List<ClassCoverage> codeCoverageData = new List<ClassCoverage>();
+            List<ClassCoverageWrapper> codeCoverageData = new List<ClassCoverageWrapper>();
 
             for (Object r : (List<Object>) deserializedRes.get('records')) {
                 Map<String, Object> record = (Map<String, Object>) r;
                 Id classId = (Id) record.get('ApexClassOrTriggerId');
                 Map<String, Object> coverage = (Map<String, Object>) record.get('Coverage');
 
-                ClassCoverage classInfo = new ClassCoverage();
+                ClassCoverageWrapper classInfo = new ClassCoverageWrapper();
                 classInfo.className = (String) apexClasses.get(classId).Name;
                 classInfo.numLinesCovered = (Integer) record.get('NumLinesCovered');
                 classInfo.numLinesUncovered = (Integer) record.get('NumLinesUncovered');

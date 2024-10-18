@@ -1,4 +1,4 @@
-public with sharing class ClassCoverage {
+public with sharing class ClassCoverageWrapper {
     @AuraEnabled
     public String className;
     @AuraEnabled
