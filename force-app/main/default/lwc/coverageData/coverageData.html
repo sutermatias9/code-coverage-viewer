@@ -1,0 +1,11 @@
+<template>
+    <lightning-card title="Apex Class Coverage">
+        <div slot="actions">
+            <lightning-button label="Run All Tests" variant="brand-outline"
+                onclick={handleRunTestsClick}></lightning-button>
+        </div>
+        <div class="slds-var-p-around_medium">
+            <c-datatable headers={tableHeaders} rows-data={tableData}></c-datatable>
+        </div>
+    </lightning-card>
+</template>
