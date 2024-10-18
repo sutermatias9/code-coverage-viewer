@@ -15,7 +15,7 @@ public with sharing class ApexClassHandler {
             HttpResponse response = http.send(request);
             Map<String, Object> deserializedRes = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
 
-            Map<Id, ApexClass> apexClasses = new Map<Id, ApexClass>([SELECT Id, Name FROM ApexClass]);
+            Map<Id, ApexClass> apexClasses = new Map<Id, ApexClass>([SELECT Id, Name, Body FROM ApexClass]);
             List<ClassCoverageWrapper> codeCoverageData = new List<ClassCoverageWrapper>();
 
             for (Object r : (List<Object>) deserializedRes.get('records')) {
@@ -24,7 +24,8 @@ public with sharing class ApexClassHandler {
                 Map<String, Object> coverage = (Map<String, Object>) record.get('Coverage');
 
                 ClassCoverageWrapper classInfo = new ClassCoverageWrapper();
-                classInfo.className = (String) apexClasses.get(classId).Name;
+                classInfo.className = apexClasses.get(classId).Name;
+                classInfo.body = JSON.serialize(apexClasses.get(classId).Body); // Serialize to preserve the \n and \t
                 classInfo.numLinesCovered = (Integer) record.get('NumLinesCovered');
                 classInfo.numLinesUncovered = (Integer) record.get('NumLinesUncovered');
                 classInfo.coveredLines = convertToIntegerList((List<Object>) coverage.get('coveredLines'));
