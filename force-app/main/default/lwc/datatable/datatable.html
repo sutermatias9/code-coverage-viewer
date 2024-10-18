@@ -12,7 +12,7 @@
         </thead>
         <tbody>
             <template for:each={rowsData} for:item="row">
-                <tr class="slds-hint-parent" key={row}>
+                <tr class="slds-hint-parent row" key={row} onclick={handleRowClick}>
                     <template iterator:celldata={row}>
                         <template lwc:if={celldata.first}>
                             <th scope="row" key={celldata.value}>
