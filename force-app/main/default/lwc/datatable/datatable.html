@@ -1,0 +1,39 @@
+<template>
+    <table class="slds-table slds-table_cell-buffer slds-table_bordered"
+        aria-label="Example default base table of Opportunities">
+        <thead>
+            <tr class="slds-line-height_reset">
+                <template for:each={headers} for:item="header">
+                    <th class="" scope="col" key={header}>
+                        <div class="slds-truncate" title={header}>{header}</div>
+                    </th>
+                </template>
+            </tr>
+        </thead>
+        <tbody>
+            <template for:each={rowsData} for:item="row">
+                <tr class="slds-hint-parent" key={row}>
+                    <template iterator:celldata={row}>
+                        <template lwc:if={celldata.first}>
+                            <th scope="row" key={celldata.value}>
+                                <div class="slds-truncate" title={celldata.value}>
+                                    <a href="#" tabindex="-1">{celldata.value}</a>
+                                </div>
+                            </th>
+                        </template>
+                        <template lwc:elseif={celldata.last}>
+                            <td key={celldata.value}>
+                                <lightning-progress-ring value={celldata.value}></lightning-progress-ring>
+                            </td>
+                        </template>
+                        <template lwc:else>
+                            <td key={celldata.value}>
+                                <div class="slds-truncate" title={celldata.value}>{celldata.value}</div>
+                            </td>
+                        </template>
+                    </template>
+                </tr>
+            </template>
+        </tbody>
+    </table>
+</template>
