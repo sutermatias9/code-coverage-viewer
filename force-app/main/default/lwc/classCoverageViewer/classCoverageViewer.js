@@ -20,4 +20,25 @@ export default class ClassCoverageViewer extends LightningElement {
     get apexClass() {
         return this._apexClass;
     }
+
+    renderedCallback() {
+        if (this.bodyLines) {
+            this.highlightLines();
+        }
+    }
+
+    highlightLines() {
+        const { coveredLines, uncoveredLines } = this.apexClass;
+        const lines = this.template.querySelectorAll('div[data-index]');
+
+        lines.forEach((line) => {
+            const lineIndex = parseInt(line.dataset.index, 10);
+
+            if (coveredLines.includes(lineIndex)) {
+                line.classList.add('covered');
+            } else if (uncoveredLines.includes(lineIndex)) {
+                line.classList.add('uncovered');
+            }
+        });
+    }
 }

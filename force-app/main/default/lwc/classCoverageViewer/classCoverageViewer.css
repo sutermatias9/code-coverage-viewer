@@ -6,3 +6,11 @@
 .line {
     margin: 0;
 }
+
+.covered {
+    background-color: var(--slds-g-color-success-base-70);
+}
+
+.uncovered {
+    background-color: var(--slds-g-color-error-base-70);
+}

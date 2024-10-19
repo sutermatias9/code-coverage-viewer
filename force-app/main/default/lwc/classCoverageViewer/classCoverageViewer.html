@@ -2,8 +2,10 @@
     <lightning-card title="Coverage Viewer">
         <div class="body slds-var-p-around_medium">
             <template for:each={bodyLines} for:item="lineInfo">
-                <div key={lineInfo.id} class="slds-grid">
-                    <div class="slds-col slds-size_1-of-12">{lineInfo.index}</div>
+                <div key={lineInfo.id} class="slds-grid" data-index={lineInfo.index}>
+                    <div class="slds-col slds-size_1-of-12 slds-border_right slds-align_absolute-center">
+                        {lineInfo.index}
+                    </div>
                     <div class="slds-col ">
                         <pre class="line">{lineInfo.line}</pre>
                     </div>
