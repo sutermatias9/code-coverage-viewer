@@ -15,17 +15,20 @@ public with sharing class ApexClassHandler {
             HttpResponse response = http.send(request);
             Map<String, Object> deserializedRes = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
 
-            Map<Id, ApexClass> apexClasses = new Map<Id, ApexClass>([SELECT Id, Name, Body FROM ApexClass]);
+            Map<Id, sObject> apexClassesAndTriggers = new Map<Id, sObject>([SELECT Id, Name, Body FROM ApexClass]);
+            apexClassesAndTriggers.putAll([SELECT Id, Name, Body FROM ApexTrigger]);
             List<ClassCoverageWrapper> codeCoverageData = new List<ClassCoverageWrapper>();
 
             for (Object r : (List<Object>) deserializedRes.get('records')) {
                 Map<String, Object> record = (Map<String, Object>) r;
-                Id classId = (Id) record.get('ApexClassOrTriggerId');
                 Map<String, Object> coverage = (Map<String, Object>) record.get('Coverage');
+                Id classId = (Id) record.get('ApexClassOrTriggerId');
+                String className = (String) apexClassesAndTriggers.get(classId).get('Name');
+                String classBody = JSON.serialize(apexClassesAndTriggers.get(classId).get('Body')); // Serialize to preserve the \n and \t
 
                 ClassCoverageWrapper classInfo = new ClassCoverageWrapper();
-                classInfo.className = apexClasses.get(classId).Name;
-                classInfo.body = JSON.serialize(apexClasses.get(classId).Body); // Serialize to preserve the \n and \t
+                classInfo.className = className;
+                classInfo.body = classBody;
                 classInfo.numLinesCovered = (Integer) record.get('NumLinesCovered');
                 classInfo.numLinesUncovered = (Integer) record.get('NumLinesUncovered');
                 classInfo.coveredLines = convertToIntegerList((List<Object>) coverage.get('coveredLines'));
