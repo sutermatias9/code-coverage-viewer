@@ -1,15 +1,20 @@
 <template>
     <lightning-card title="Coverage Viewer" icon-name="standard:care_request_reviewer">
         <div class="body slds-var-p-around_medium">
-            <template for:each={bodyLines} for:item="lineInfo">
-                <div key={lineInfo.id} class="slds-grid" data-index={lineInfo.index}>
-                    <div class="slds-col slds-size_1-of-12 slds-border_right slds-align_absolute-center">
-                        {lineInfo.index}
+            <template lwc:if={bodyLines}>
+                <template for:each={bodyLines} for:item="lineInfo">
+                    <div key={lineInfo.id} class="slds-grid" data-index={lineInfo.index}>
+                        <div class="slds-col slds-size_1-of-12 slds-border_right slds-align_absolute-center">
+                            {lineInfo.index}
+                        </div>
+                        <div class="slds-col ">
+                            <pre class="line">{lineInfo.line}</pre>
+                        </div>
                     </div>
-                    <div class="slds-col ">
-                        <pre class="line">{lineInfo.line}</pre>
-                    </div>
-                </div>
+                </template>
+            </template>
+            <template lwc:else>
+                <c-illustration message="Select a Class to View Coverage"></c-illustration>
             </template>
         </div>
     </lightning-card>
