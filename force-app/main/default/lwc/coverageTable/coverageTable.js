@@ -1,6 +1,8 @@
 import { LightningElement, api } from 'lwc';
 
 export default class CoverageData extends LightningElement {
+    @api isLoading;
+
     tableHeaders = ['Apex Class', 'Total Lines', 'Covered Lines', 'Uncovered Lines', 'Coverage'];
     tableData;
 

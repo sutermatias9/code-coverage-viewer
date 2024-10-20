@@ -1,11 +1,18 @@
 <template>
-    <lightning-card title="Apex Class Coverage">
+    <lightning-card title="Apex Class Coverage" icon-name="standard:apex">
         <div slot="actions">
             <lightning-button label="Run All Tests" variant="brand-outline"
                 onclick={handleRunTestsClick}></lightning-button>
         </div>
         <div class="slds-var-p-around_medium">
-            <c-datatable headers={tableHeaders} rows-data={tableData}></c-datatable>
+            <template lwc:if={isLoading}>
+                <div class="spinner-container">
+                    <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                </div>
+            </template>
+            <template lwc:else>
+                <c-datatable headers={tableHeaders} rows-data={tableData}></c-datatable>
+            </template>
         </div>
     </lightning-card>
 </template>

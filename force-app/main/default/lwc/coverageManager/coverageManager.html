@@ -1,7 +1,8 @@
 <template>
     <div class="slds-grid slds-gutters">
         <div class="slds-col slds-size_1-of-2">
-            <c-coverage-table ontestrun={handleTestRun} onrowclick={handleRowClick}></c-coverage-table>
+            <c-coverage-table ontestrun={handleTestRun} onrowclick={handleRowClick}
+                is-loading={isLoading}></c-coverage-table>
         </div>
         <div class="slds-col slds-size_1-of-2">
             <c-class-coverage-viewer apex-class={selectedClass}></c-class-coverage-viewer>

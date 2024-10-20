@@ -5,6 +5,7 @@ import runAllTests from '@salesforce/apex/ApexTestRunner.runAllTests';
 export default class CoverageManager extends LightningElement {
     coverageData;
     selectedClass;
+    isLoading = false;
 
     connectedCallback() {
         this.updateCoverage();
@@ -20,9 +21,13 @@ export default class CoverageManager extends LightningElement {
     }
 
     async updateCoverage() {
+        this.isLoading = true;
+
         try {
             await runAllTests();
             this.coverageData = await getClassCoverages();
+
+            this.isLoading = false;
             this.template.querySelector('c-coverage-table').createTableData(this.coverageData);
         } catch (e) {
             console.error(e);
