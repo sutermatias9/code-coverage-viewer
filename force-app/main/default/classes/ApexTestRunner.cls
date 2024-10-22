@@ -14,4 +14,11 @@ public with sharing class ApexTestRunner {
 
         return testItems.size();
     }
+
+    @AuraEnabled
+    public static Boolean areTestsInQueue() {
+        List<ApexTestQueueItem> items = [SELECT Id FROM ApexTestQueueItem WHERE Status IN ('Queued', 'Preparing', 'Processing')];
+
+        return items.size() > 0;
+    }
 }
