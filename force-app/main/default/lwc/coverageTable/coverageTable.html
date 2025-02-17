@@ -11,7 +11,9 @@
                 </div>
             </template>
             <template lwc:else>
-                <c-datatable headers={tableHeaders} rows-data={tableData}></c-datatable>
+                <div class="table-container">
+                    <c-datatable headers={tableHeaders} rows-data={tableData}></c-datatable>
+                </div>
             </template>
         </div>
     </lightning-card>
